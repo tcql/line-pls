@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap");
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin "daisyui" {
+  themes: all;
+}
+
+
+@theme {
+  --font-atkinson: "Atkinson Hyperlegible", sans-serif;
+}
+
+body {
+  font-family: var(--font-atkinson);
+}
