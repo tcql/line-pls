@@ -45,7 +45,7 @@
 	});
 </script>
 
-<select class="select" data-choose-theme>
+<select class="select cursor-pointer" data-choose-theme>
 	{#each themes as theme}
 		<option value={theme}>{theme}</option>
 	{/each}

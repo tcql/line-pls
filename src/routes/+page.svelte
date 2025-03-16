@@ -1,53 +1,63 @@
 <script>
-	import { goto } from '$app/navigation';
+
 	import { base } from '$app/paths';
-	import { getSegments } from '$lib';
-	import SegmentMinimap from '$lib/SegmentMinimap.svelte';
+	import { getFragments } from '$lib';
+	import FragmentMinimap from '$lib/FragmentMinimap.svelte';
 	import { content, contentPosition, settings } from '$lib/stores';
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	let hasContent = $content != '';
 
-	let segments = getSegments($content, $settings.maxLineLength);
-	let segmentIndex = 0;
-
+	let fragments = getFragments($content, $settings.maxLineLength, $settings.useSourceLines);
+	let fragmentIndex = $state(0);
 	restoreProgress();
 
-	$: currSeg = segments[segmentIndex];
-	$: prevSeg = segmentIndex > 0 ? segments[segmentIndex - 1] : { text: '', length: 0 };
-	$: nextSeg =
-		segmentIndex !== segments.length - 1 ? segments[segmentIndex + 1] : { text: '', length: 0 };
+	let currSeg = $derived(
+		fragments.length > 0 
+			? fragments[fragmentIndex]
+			: { text: '', length: 0})
+	let prevSeg = $derived(
+		fragmentIndex > 0 
+			? fragments[fragmentIndex - 1] 
+			: { text: '', length: 0 }
+	);
+	let nextSeg = $derived(
+		fragmentIndex !== fragments.length - 1 
+			? fragments[fragmentIndex + 1] 
+			: { text: '', length: 0 }
+	);
 
-	function advanceSegment() {
-		if (segmentIndex == segments.length - 1) return;
-		segmentIndex++;
+	function advanceFragment() {
+		if (fragmentIndex == fragments.length - 1) return;
+		fragmentIndex++;
 		updateProgress();
 	}
 
-	function goBackSegment() {
-		if (segmentIndex == 0) return;
-		segmentIndex--;
+	function goBackFragment() {
+		if (fragmentIndex == 0) return;
+		fragmentIndex--;
 		updateProgress();
 	}
 
 	function updateProgress() {
-		const progress = segmentIndex / segments.length;
+		const progress = fragmentIndex / fragments.length;
 		$contentPosition = progress;
 	}
 
 	function restoreProgress() {
-		segmentIndex = Math.round((segments.length - 1) * $contentPosition);
+		fragmentIndex = Math.round((fragments.length - 1) * $contentPosition);
 	}
 
 	function onKeyDown(e) {
 		switch (e.keyCode) {
 			case 32:
 			case 39:
-				advanceSegment();
+			case 40:
+				advanceFragment();
 				break;
 			case 37:
-				goBackSegment();
+			case 38:
+				goBackFragment();
 				break;
 		}
 	}
@@ -58,7 +68,7 @@
 {:else}
 	<div class="flex flex-1 flex-row gap-8">
 		<div>
-			<SegmentMinimap
+			<FragmentMinimap
 				onSetProgress={(val) => {
 					const perc = val / 100.0;
 					$contentPosition = perc;
@@ -68,16 +78,24 @@
 		</div>
 		<div class="flex flex-1 flex-col gap-2">
 			<div class="flex flex-1 flex-col gap-8 text-5xl">
-				{#key segmentIndex}
+				{#key fragmentIndex}
 					<div in:fade class="flex-1 text-xl opacity-60">{prevSeg.text}</div>
 					<div in:fade class="flex-1">{currSeg.text}</div>
 					<div in:fade class="flex-1 text-xl opacity-60">{nextSeg.text}</div>
 				{/key}
 			</div>
 			<hr />
-			Line {segmentIndex + 1} of {segments.length} ( {($contentPosition * 100).toFixed(1)}% )
+			<div class='flex'>
+				<div class='flex-1'>Line {fragmentIndex + 1} of {fragments.length} ( {($contentPosition * 100).toFixed(1)}% )</div>
+				<div>
+					use <kbd class="kbd">space</kbd>, <kbd class="kbd">→</kbd>, or<kbd class="kbd">↓</kbd> to advance. 
+					<kbd class="kbd">←</kbd>, or <kbd class="kbd">↑</kbd> to go back.
+				</div>
+			</div>
+			
+		
 		</div>
 	</div>
 {/if}
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window onkeydown={onKeyDown} />

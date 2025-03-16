@@ -1,24 +1,40 @@
 
 /**
- * @typedef {object} SegmentObject
+ * @typedef {object} FragmentObject
  * @property {string} text
  * @property {number} length
  */
 
 /**
- * Given string content, a current character position, and the max line length,
- * tries to break into "lines" that split cleanly on words.
+ * Given string content, split into a series of fragments. How splitting 
+ * is achieved depends on the `maxLineLength` and `useSourceLines` settings
  * 
  * @param {string} content 
  * @param {number} maxLineLength 
- * @returns {SegmentObject[]}
+ * @param {boolean} useSourceLines
+ * @returns {FragmentObject[]}
  */
-export function getSegments(content, maxLineLength) {
+export function getFragments(content, maxLineLength, useSourceLines=false) {
     if (!content.length) {
         return []
     }
-    const segments = findSubsegments(content.slice(), maxLineLength)
-    return segments.flat()
+    if (useSourceLines) {
+        return findFragmentsBySourceLines(content.slice())
+    }
+    return findFragmentsByLineLength(content.slice(), maxLineLength)
+    // return segments.flat()
+}
+
+/**
+ * Splits content using source newlines
+ * 
+ * @param {string} content 
+ * @returns {FragmentObject[]}
+ */
+function findFragmentsBySourceLines(content) {
+    return content.split('\n')
+        .filter(l => Boolean(l.trim()))
+        .map(l => serializeFragment([l.trim()]))
 }
 
 
@@ -28,10 +44,10 @@ export function getSegments(content, maxLineLength) {
  * 
  * @param {string} content 
  * @param {number} maxLineLength 
- * @returns {SegmentObject[]}
+ * @returns {FragmentObject[]}
  */
-function findSubsegments(content, maxLineLength) {
-    /** @type {SegmentObject[]} */
+function findFragmentsByLineLength(content, maxLineLength) {
+    /** @type {FragmentObject[]} */
     const segments = []
     
     const lines = content.split('\n\n').filter(Boolean)
@@ -45,7 +61,7 @@ function findSubsegments(content, maxLineLength) {
         subseg.forEach(seg => {
             if (currLen > maxLineLength) {
                 const prev = currSeg.pop()
-                segments.push(serializeSegment(currSeg))
+                segments.push(serializeFragment(currSeg))
                 if (prev) {
                     currSeg = [prev]
                     currLen = prev.length + 1
@@ -55,7 +71,7 @@ function findSubsegments(content, maxLineLength) {
             currSeg.push(seg)
         })
         if (currSeg.length > 0) {
-            segments.push(serializeSegment(currSeg))
+            segments.push(serializeFragment(currSeg))
         }
     })
 
@@ -63,10 +79,10 @@ function findSubsegments(content, maxLineLength) {
 }
 
 /**
- * @param {string[]} seg 
- * @returns {SegmentObject}
+ * @param {string[]} frag 
+ * @returns {FragmentObject}
  */
-function serializeSegment(seg) {
-    const text = seg.join(' ')
+function serializeFragment(frag) {
+    const text = frag.join(' ')
     return {text, length: text.length}
 }

@@ -17,7 +17,7 @@
 	{#each { length: percentileCount }, rank}
 		{@const percentile = rank * percentileSize}
 		{@const inPercentile = isInPercentile(pos, percentile, percentileSize)}
-		<div class="flex-1 cursor-pointer py-0.25" on:click={() => onSetProgress(percentile)}>
+		<div class="flex-1 cursor-pointer py-0.25" onclick={() => onSetProgress(percentile)}>
 			<div
 				class="h-full w-full rounded-sm"
 				class:bg-primary={inPercentile}

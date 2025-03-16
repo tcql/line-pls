@@ -20,5 +20,6 @@ content.subscribe((val) => {
 
 
 export const settings = persisted('settings', {
-  maxLineLength: 150
+  maxLineLength: 150,
+  useSourceLines: false
 })
