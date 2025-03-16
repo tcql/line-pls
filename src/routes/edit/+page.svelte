@@ -33,8 +33,8 @@
 			</p>
 			<p>
 				<strong>Plain text</strong> content is best. If copying from Project Gutenberg, it's recommended
-				you copy from the "Plain Text UTF-8" version and enable "Use source line breaks" in line-pls
-				settings
+				that you copy text directly from the "Plain Text UTF-8" version of the book and enable "Use source
+				line breaks" in line-pls settings
 			</p>
 		</div>
 	</div>
