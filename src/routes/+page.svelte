@@ -1,26 +1,42 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { getSegments } from '$lib';
+	import SegmentMinimap from '$lib/SegmentMinimap.svelte';
 	import { content, contentPosition, settings } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	let hasContent = $content != '';
 
-	let { segments, segmentIndex } = getSegments($content, $contentPosition, $settings.maxLineLength);
+	let segments = getSegments($content, $settings.maxLineLength);
+	let segmentIndex = 0;
+
+	restoreProgress();
 
 	$: currSeg = segments[segmentIndex];
-	$: prevSeg = segmentIndex > 0 ? segments[segmentIndex - 1] : '';
-	$: nextSeg = segmentIndex !== segments.length ? segments[segmentIndex + 1] : '';
+	$: prevSeg = segmentIndex > 0 ? segments[segmentIndex - 1] : { text: '', length: 0 };
+	$: nextSeg =
+		segmentIndex !== segments.length ? segments[segmentIndex + 1] : { text: '', length: 0 };
 
 	function advanceSegment() {
 		if (segmentIndex == segments.length) return;
 		segmentIndex++;
+		updateProgress();
 	}
 
 	function goBackSegment() {
 		if (segmentIndex == 0) return;
 		segmentIndex--;
+		updateProgress();
+	}
+
+	function updateProgress() {
+		const progress = segmentIndex / segments.length;
+		$contentPosition = progress;
+	}
+
+	function restoreProgress() {
+		segmentIndex = Math.round(segments.length * $contentPosition);
 	}
 
 	function onKeyDown(e) {
@@ -40,16 +56,28 @@
 {#if !hasContent}
 	<a href="/edit">add some content!</a>
 {:else}
-	<div class="flex flex-1 flex-col gap-8 text-5xl">
-		{#key segmentIndex}
-			<div in:fade class="flex-1 text-xl opacity-70">{prevSeg}</div>
-			<div in:fade class="flex-1">{currSeg}</div>
-			<div in:fade class="flex-1 text-xl opacity-70">{nextSeg}</div>
-		{/key}
+	<div class="flex flex-1 flex-row gap-8">
+		<div>
+			<SegmentMinimap
+				onSetProgress={(val) => {
+					const perc = val / 100.0;
+					$contentPosition = perc;
+					restoreProgress();
+				}}
+			/>
+		</div>
+		<div class="flex flex-1 flex-col gap-2">
+			<div class="flex flex-1 flex-col gap-8 text-5xl">
+				{#key segmentIndex}
+					<div in:fade class="flex-1 text-xl opacity-60">{prevSeg.text}</div>
+					<div in:fade class="flex-1">{currSeg.text}</div>
+					<div in:fade class="flex-1 text-xl opacity-60">{nextSeg.text}</div>
+				{/key}
+			</div>
+			<hr />
+			Line {segmentIndex + 1} of {segments.length} ( {($contentPosition * 100).toFixed(1)}% )
+		</div>
 	</div>
-	<hr />
-
-	Line {segmentIndex + 1} of {segments.length}
 {/if}
 
 <svelte:window on:keydown={onKeyDown} />

@@ -1,9 +1,8 @@
-// place files you want to import through the `$lib` alias in this folder.
 
 /**
  * @typedef {object} SegmentObject
- * @property {string[]} segments
- * @property {number} segmentIndex
+ * @property {string} text
+ * @property {number} length
  */
 
 /**
@@ -11,61 +10,63 @@
  * tries to break into "lines" that split cleanly on words.
  * 
  * @param {string} content 
- * @param {number} currentPosition 
  * @param {number} maxLineLength 
- * @returns {SegmentObject}
+ * @returns {SegmentObject[]}
  */
-export function getSegments(content, currentPosition, maxLineLength) {
+export function getSegments(content, maxLineLength) {
     if (!content.length) {
-        return {segments: [], segmentIndex: 0}
+        return []
     }
-    const before = content.slice(0, currentPosition)
-    const after = content.slice(currentPosition)
-
-    const {segments} = getSegments(before, Math.max(currentPosition - maxLineLength, 0), maxLineLength)
-    const segmentIndex = segments.length
-
-    const afterSegments = findSubsegments(after, maxLineLength)
-    return {
-        segments: segments.concat(afterSegments),
-        segmentIndex
-    }
+    const segments = findSubsegments(content.slice(), maxLineLength)
+    return segments.flat()
 }
 
 
 /**
+ * Splits up by double line breaks (ie: paragraph splits), applies some filtering, 
+ * then uses word splits to try creating new "lines" up to `maxLineLength`
  * 
  * @param {string} content 
  * @param {number} maxLineLength 
- * @returns {string[]}
+ * @returns {SegmentObject[]}
  */
 function findSubsegments(content, maxLineLength) {
+    /** @type {SegmentObject[]} */
     const segments = []
-    /** @type string[] */
-    let currSeg = []
-
-    const subseg = content.split(' ')
-    subseg.forEach(seg => { 
-        if (currSeg.join(' ').length > maxLineLength) {
-            let prev = currSeg.pop()
-            segments.push(currSeg.join(' '))
-            currSeg = [prev]
+    
+    const lines = content.split('\n\n').filter(Boolean)
+    console.log(lines)
+    lines.forEach(line => { 
+        /** @type {string[]} */
+        let currSeg = []
+        let currLen = 0
+        // drop single newlines, then split on words
+        const subseg = line.replace('\n', ' ').trim().split(/\s+/)
+        subseg.forEach(seg => {
+            if (currLen > maxLineLength) {
+                const prev = currSeg.pop()
+                segments.push(serializeSegment(currSeg))
+                if (prev) {
+                    currSeg = [prev]
+                    currLen = prev.length + 1
+                } 
+            }
+            currLen += seg.length + 1
+            currSeg.push(seg)
+        })
+        if (currSeg.length > 0) {
+            segments.push(serializeSegment(currSeg))
         }
-        currSeg.push(seg)
     })
-    if (currSeg.length > 0) {
-        segments.push(currSeg.join(' '))
-    }
+
     return segments
 }
 
 /**
- * 
- * @param {string} content 
- * @param {number} maxLineLength 
- * @returns {string[]}
+ * @param {string[]} seg 
+ * @returns {SegmentObject}
  */
-function findSubsegments2(content, maxLineLength) {
-    // const sentences = 
-    return []
+function serializeSegment(seg) {
+    const text = seg.join(' ')
+    return {text, length: text.length}
 }
