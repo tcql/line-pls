@@ -1,24 +1,23 @@
 <script>
-	/** @import { Component } from 'svelte' */
-	import Cog8Tooth from './Icons/Cog8Tooth.svelte';
-	import PencilSquare from './Icons/PencilSquare.svelte';
-	import PresentationChartLine from './Icons/PresentationChartLine.svelte';
+	/** @import { IconSource } from 'svelte-hero-icons' */
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
+
+	import { Icon, Cog8Tooth, PencilSquare, PresentationChartLine } from 'svelte-hero-icons';
 
 	/**
 	 * @typedef {object} RouteData
 	 * @property {string} path
 	 * @property {string} title
-	 * @property {Component} icon 
+	 * @property {IconSource} icon
 	 */
 
-	 /** @type {RouteData[]} */
+	/** @type {RouteData[]} */
 	const routes = [
-		{title: 'Edit', path: 'edit', icon: PencilSquare,},
-		{title: 'Show', path: '', icon: PresentationChartLine},
-		{title: 'Settings', path: 'settings', icon: Cog8Tooth}
-	]
+		{ title: 'Edit', path: 'edit', icon: PencilSquare },
+		{ title: 'Show', path: '', icon: PresentationChartLine },
+		{ title: 'Settings', path: 'settings', icon: Cog8Tooth }
+	];
 
 	function isActive(path) {
 		console.log(page.url.pathname, `${base}/${path}`);
@@ -29,10 +28,11 @@
 <div class="dock bg-neutral text-neutral-content">
 	{#each routes as route}
 		{@const active = isActive(route.path)}
+		{@const iargs = route.iargs || {}}
 		<a href="{base}/{route.path}" class:dock-active={active} class:text-secondary={active}>
-			<svelte:component this={route.icon} />
+			<Icon src={route.icon} size="24" />
+
 			<span class="dock-label">{route.title}</span>
 		</a>
 	{/each}
-
 </div>
