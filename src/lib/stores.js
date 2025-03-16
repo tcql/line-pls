@@ -4,7 +4,7 @@ import { persisted } from 'svelte-persisted-store'
 // Second param is the initial value.
 export const content = persisted('content', '')
 
-// which character is the start of the last render
+// what percentage of the way through content (based on post-segmentation split) we are
 export const contentPosition = persisted('content-position', 0)
 
 let prev
@@ -13,16 +13,12 @@ content.subscribe((val) => {
   // *after* the initial load from localstorage, and only if
   // the new val isn't the old val
   if (prev && prev != val) {
-    console.log('did an update')
-     
     contentPosition.set(0) 
-  } else {
-    console.log('didnt update')
   }
   prev = val
 })
 
 
 export const settings = persisted('settings', {
-  maxLineLength: 50
+  maxLineLength: 150
 })

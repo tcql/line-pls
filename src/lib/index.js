@@ -35,7 +35,7 @@ function findSubsegments(content, maxLineLength) {
     const segments = []
     
     const lines = content.split('\n\n').filter(Boolean)
-    console.log(lines)
+
     lines.forEach(line => { 
         /** @type {string[]} */
         let currSeg = []

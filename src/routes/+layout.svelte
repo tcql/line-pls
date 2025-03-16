@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	import { themeChange } from 'theme-change';
+
 	let { children } = $props();
 
 	onMount(() => {

@@ -16,10 +16,10 @@
 	$: currSeg = segments[segmentIndex];
 	$: prevSeg = segmentIndex > 0 ? segments[segmentIndex - 1] : { text: '', length: 0 };
 	$: nextSeg =
-		segmentIndex !== segments.length ? segments[segmentIndex + 1] : { text: '', length: 0 };
+		segmentIndex !== (segments.length - 1) ? segments[segmentIndex + 1] : { text: '', length: 0 };
 
 	function advanceSegment() {
-		if (segmentIndex == segments.length) return;
+		if (segmentIndex == segments.length - 1) return;
 		segmentIndex++;
 		updateProgress();
 	}
@@ -36,11 +36,10 @@
 	}
 
 	function restoreProgress() {
-		segmentIndex = Math.round(segments.length * $contentPosition);
+		segmentIndex = Math.round((segments.length -1) * $contentPosition);
 	}
 
 	function onKeyDown(e) {
-		console.log(e.keyCode);
 		switch (e.keyCode) {
 			case 32:
 			case 39:
