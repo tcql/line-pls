@@ -3,24 +3,26 @@
 	import PencilSquare from './Icons/PencilSquare.svelte';
 	import PresentationChartLine from './Icons/PresentationChartLine.svelte';
 	import { page } from '$app/state';
+	import { base } from '$app/paths';
 
 	function isActive(path) {
-		return page.url.pathname == path;
+		console.log(base, path);
+		return page.url.pathname == `${base}/${path}`;
 	}
 </script>
 
 <div class="dock bg-neutral text-neutral-content">
-	<a href="/edit" class:dock-active={isActive('/edit')}>
+	<a href="{base}/edit" class:dock-active={isActive('/edit')}>
 		<PencilSquare />
 		<span class="dock-label">Edit</span>
 	</a>
 
-	<a href="/" class:dock-active={isActive('/')}>
+	<a href="{base}/" class:dock-active={isActive('/')}>
 		<PresentationChartLine />
 		<span class="dock-label">Show</span>
 	</a>
 
-	<a href="/settings" class:dock-active={isActive('/settings')}>
+	<a href="{base}/settings" class:dock-active={isActive('/settings')}>
 		<Cog8Tooth />
 		<span class="dock-label">Settings</span>
 	</a>

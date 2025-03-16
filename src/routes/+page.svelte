@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { getSegments } from '$lib';
 	import SegmentMinimap from '$lib/SegmentMinimap.svelte';
 	import { content, contentPosition, settings } from '$lib/stores';
@@ -16,7 +17,7 @@
 	$: currSeg = segments[segmentIndex];
 	$: prevSeg = segmentIndex > 0 ? segments[segmentIndex - 1] : { text: '', length: 0 };
 	$: nextSeg =
-		segmentIndex !== (segments.length - 1) ? segments[segmentIndex + 1] : { text: '', length: 0 };
+		segmentIndex !== segments.length - 1 ? segments[segmentIndex + 1] : { text: '', length: 0 };
 
 	function advanceSegment() {
 		if (segmentIndex == segments.length - 1) return;
@@ -36,7 +37,7 @@
 	}
 
 	function restoreProgress() {
-		segmentIndex = Math.round((segments.length -1) * $contentPosition);
+		segmentIndex = Math.round((segments.length - 1) * $contentPosition);
 	}
 
 	function onKeyDown(e) {
@@ -53,7 +54,7 @@
 </script>
 
 {#if !hasContent}
-	<a href="/edit">add some content!</a>
+	<a href="{base}/edit">add some content!</a>
 {:else}
 	<div class="flex flex-1 flex-row gap-8">
 		<div>
