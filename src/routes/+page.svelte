@@ -1,5 +1,4 @@
 <script>
-
 	import { base } from '$app/paths';
 	import { getFragments } from '$lib';
 	import FragmentMinimap from '$lib/FragmentMinimap.svelte';
@@ -12,19 +11,12 @@
 	let fragmentIndex = $state(0);
 	restoreProgress();
 
-	let currSeg = $derived(
-		fragments.length > 0 
-			? fragments[fragmentIndex]
-			: { text: '', length: 0})
+	let currSeg = $derived(fragments.length > 0 ? fragments[fragmentIndex] : { text: '', length: 0 });
 	let prevSeg = $derived(
-		fragmentIndex > 0 
-			? fragments[fragmentIndex - 1] 
-			: { text: '', length: 0 }
+		fragmentIndex > 0 ? fragments[fragmentIndex - 1] : { text: '', length: 0 }
 	);
 	let nextSeg = $derived(
-		fragmentIndex !== fragments.length - 1 
-			? fragments[fragmentIndex + 1] 
-			: { text: '', length: 0 }
+		fragmentIndex !== fragments.length - 1 ? fragments[fragmentIndex + 1] : { text: '', length: 0 }
 	);
 
 	function advanceFragment() {
@@ -79,21 +71,22 @@
 		<div class="flex flex-1 flex-col gap-2">
 			<div class="flex flex-1 flex-col gap-8 text-5xl">
 				{#key fragmentIndex}
-					<div in:fade class="flex-1 text-xl opacity-60">{prevSeg.text}</div>
-					<div in:fade class="flex-1">{currSeg.text}</div>
-					<div in:fade class="flex-1 text-xl opacity-60">{nextSeg.text}</div>
+					<div in:fade class="flex-1 content-center text-xl opacity-60">{prevSeg.text}</div>
+					<div in:fade class="flex-1 content-center">{currSeg.text}</div>
+					<div in:fade class="flex-1 content-center text-xl opacity-60">{nextSeg.text}</div>
 				{/key}
 			</div>
 			<hr />
-			<div class='flex'>
-				<div class='flex-1'>Line {fragmentIndex + 1} of {fragments.length} ( {($contentPosition * 100).toFixed(1)}% )</div>
+			<div class="flex">
+				<div class="flex-1">
+					Line {fragmentIndex + 1} of {fragments.length} ( {($contentPosition * 100).toFixed(1)}% )
+				</div>
 				<div>
-					use <kbd class="kbd">space</kbd>, <kbd class="kbd">→</kbd>, or<kbd class="kbd">↓</kbd> to advance. 
+					use <kbd class="kbd">space</kbd>, <kbd class="kbd">→</kbd>, or<kbd class="kbd">↓</kbd> to
+					advance.
 					<kbd class="kbd">←</kbd>, or <kbd class="kbd">↑</kbd> to go back.
 				</div>
 			</div>
-			
-		
 		</div>
 	</div>
 {/if}
