@@ -86,3 +86,21 @@ function serializeFragment(frag) {
     const text = frag.join(' ')
     return {text, length: text.length}
 }
+
+/**
+ * Naïvely search in fragments for a string
+ * 
+ * @param {FragmentObject[]} fragments
+ * @param {string} searchText 
+ * @param {number} start 
+ */
+export function findInFragments(fragments, searchText, start=0) {
+    const searchLower = searchText.toLowerCase()
+    for (let i = start; i < fragments.length; i++) {
+        const {text} = fragments[i]
+        if (text.toLowerCase().includes(searchLower)) {
+            return i
+        }
+    }
+    return null
+}
