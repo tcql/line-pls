@@ -1,6 +1,6 @@
 <script>
 	import { findInFragments } from "$lib";
-	import { ArrowLeft, ArrowRight, Icon, MagnifyingGlass } from "svelte-hero-icons";
+	import { ChevronLeft, ChevronRight, Icon } from "svelte-hero-icons";
 
   let {
     fragmentIndex = $bindable(0),
@@ -50,8 +50,8 @@
         <input type="search" placeholder="Search" bind:value={searchValue} />
       </label>
     </div>
-    {@render searchNav(prevResult, ArrowLeft)}
-    {@render searchNav(nextResult, ArrowRight)}
+    {@render searchNav(prevResult, ChevronLeft)}
+    {@render searchNav(nextResult, ChevronRight)}
   </div>
   
 </div>

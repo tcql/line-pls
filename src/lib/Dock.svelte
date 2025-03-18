@@ -28,7 +28,6 @@
 <div class="dock bg-neutral text-neutral-content">
 	{#each routes as route}
 		{@const active = isActive(route.path)}
-		{@const iargs = route.iargs || {}}
 		<a href="{base}/{route.path}" class:dock-active={active} class:text-secondary={active}>
 			<Icon src={route.icon} size="24" />
 
