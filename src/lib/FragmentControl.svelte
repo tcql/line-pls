@@ -14,7 +14,7 @@
 	}
 
 	function updateProgress() {
-		const progress = fragmentIndex / fragments.length;
+		const progress = fragmentIndex / (fragments.length - 1);
 		contentPosition = progress;
 	}
 

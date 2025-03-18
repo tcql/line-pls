@@ -31,28 +31,24 @@
 	 * @param {number} percentage human-friendly percentage (eg: 58%) to set content progress to
 	 */
 	function setProgressTo(percentage) {
-		$contentPosition = percentage / 100.0
+		$contentPosition = percentage / 100.0;
 		restoreProgress();
 	}
 </script>
 
 {#if $content == ''}
-<div class='prose'>
-	<h3>Welcome to <strong class='text-secondary'>line-pls</strong>!</h3>
-	<p>
-		Check out the <a class='cursor-pointer' onclick={()=> $helpOpen = true}>Help</a> for guidance,
-		or go ahead and <a class='cursor-pointer' href="{base}/edit">add some content</a>
-	</p>
-	<p>
-		Happy reading!
-	</p>
-</div>
+	<div class="prose">
+		<h3>Welcome to <strong class="text-secondary">line-pls</strong>!</h3>
+		<p>
+			Check out the <a class="cursor-pointer" onclick={() => ($helpOpen = true)}>Help</a> for
+			guidance, or go ahead and <a class="cursor-pointer" href="{base}/edit">add some content</a>
+		</p>
+		<p>Happy reading!</p>
+	</div>
 {:else}
 	<FragmentControl bind:fragmentIndex {fragments} bind:contentPosition={$contentPosition} />
 	<div class="flex flex-1 flex-row gap-8">
-		<FragmentMinimap
-			onSetProgress={setProgressTo}
-		/>
+		<FragmentMinimap onSetProgress={setProgressTo} />
 
 		<div class="flex flex-1 flex-col gap-2">
 			<FragmentSearch {fragments} bind:fragmentIndex />
