@@ -6,6 +6,7 @@
 	import FragmentDisplay from '$lib/FragmentDisplay.svelte';
 	import FragmentMinimap from '$lib/FragmentMinimap.svelte';
 	import FragmentsFooter from '$lib/FragmentsFooter.svelte';
+	import FragmentSearch from '$lib/FragmentSearch.svelte';
 	import { content, contentPosition, settings } from '$lib/stores';
 
 	/**
@@ -25,6 +26,14 @@
 	function restoreProgress() {
 		fragmentIndex = Math.round((fragments.length - 1) * $contentPosition);
 	}
+
+	/**
+	 * @param {number} percentage human-friendly percentage (eg: 58%) to set content progress to
+	 */
+	function setProgressTo(percentage) {
+		$contentPosition = percentage / 100.0
+		restoreProgress();
+	}
 </script>
 
 {#if $content == ''}
@@ -33,14 +42,11 @@
 	<FragmentControl bind:fragmentIndex {fragments} bind:contentPosition={$contentPosition} />
 	<div class="flex flex-1 flex-row gap-8">
 		<FragmentMinimap
-			onSetProgress={(val) => {
-				const perc = val / 100.0;
-				$contentPosition = perc;
-				restoreProgress();
-			}}
+			onSetProgress={setProgressTo}
 		/>
 
 		<div class="flex flex-1 flex-col gap-2">
+			<FragmentSearch {fragments} bind:fragmentIndex />
 			<FragmentDisplay {fragments} {fragmentIndex} />
 			<hr />
 			<FragmentsFooter

@@ -93,14 +93,23 @@ function serializeFragment(frag) {
  * @param {FragmentObject[]} fragments
  * @param {string} searchText 
  * @param {number} start 
+ * @param {boolean} backwards
  */
-export function findInFragments(fragments, searchText, start=0) {
+export function findInFragments(fragments, searchText, start=0, backwards=false) {
+    if (backwards) {
+        start = fragments.length - start - 1
+        fragments = fragments.slice()
+        fragments.reverse()
+    }
     const searchLower = searchText.toLowerCase()
     for (let i = start; i < fragments.length; i++) {
         const {text} = fragments[i]
         if (text.toLowerCase().includes(searchLower)) {
+            if (backwards) {
+                return fragments.length - i - 1
+            }
             return i
         }
     }
-    return null
+    return false
 }
