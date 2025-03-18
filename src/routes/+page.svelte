@@ -7,7 +7,7 @@
 	import FragmentMinimap from '$lib/FragmentMinimap.svelte';
 	import FragmentsFooter from '$lib/FragmentsFooter.svelte';
 	import FragmentSearch from '$lib/FragmentSearch.svelte';
-	import { content, contentPosition, settings } from '$lib/stores';
+	import { content, contentPosition, settings, helpOpen } from '$lib/stores';
 
 	/**
 	 * List of fragments or "lines" that will be displayed one by one
@@ -37,7 +37,16 @@
 </script>
 
 {#if $content == ''}
-	<a href="{base}/edit">add some content!</a>
+<div class='prose'>
+	<h3>Welcome to <strong class='text-secondary'>line-pls</strong>!</h3>
+	<p>
+		Check out the <a class='cursor-pointer' onclick={()=> $helpOpen = true}>Help</a> for guidance,
+		or go ahead and <a class='cursor-pointer' href="{base}/edit">add some content</a>
+	</p>
+	<p>
+		Happy reading!
+	</p>
+</div>
 {:else}
 	<FragmentControl bind:fragmentIndex {fragments} bind:contentPosition={$contentPosition} />
 	<div class="flex flex-1 flex-row gap-8">
