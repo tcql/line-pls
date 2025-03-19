@@ -23,10 +23,21 @@
 	 */
 	let fragmentIndex: number = $state(0);
 
+	/**
+	 * Set contentPosition store when the fragmentIndex state gets updated.
+	 * This usually occurs when the user presses one of the control keys
+	 * or uses the search feature
+	 */
+	$effect(() => {
+		$contentPosition = fragmentIndex / (fragments.length - 1);
+	});
+
 	restoreProgress();
 
 	/**
-	 * calculates a fragment index based on the fractional percent contentPosition
+	 * calculates a fragment index based on the fractional percent contentPosition.
+	 * this occurs when we first load the page (restoring progress from localStorage)
+	 * or when the Minimap updates location (via setProgressTo)
 	 */
 	function restoreProgress(): void {
 		fragmentIndex = Math.round((fragments.length - 1) * $contentPosition);
@@ -52,7 +63,7 @@
 		<p>Happy reading!</p>
 	</div>
 {:else}
-	<FragmentControl bind:fragmentIndex {fragments} bind:contentPosition={$contentPosition} />
+	<FragmentControl bind:fragmentIndex {fragments} />
 	<div class="flex flex-1 flex-row gap-8">
 		<FragmentMinimap onSetProgress={setProgressTo} />
 

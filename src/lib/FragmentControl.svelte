@@ -4,29 +4,17 @@
 	interface Props {
 		fragments: FragmentObject[];
 		fragmentIndex: number;
-		contentPosition: number;
 	}
-	let {
-		fragments = [],
-		contentPosition = $bindable(0.0),
-		fragmentIndex = $bindable(0)
-	}: Props = $props();
+	let { fragments = [], fragmentIndex = $bindable(0) }: Props = $props();
 
 	function advanceFragment() {
 		if (fragmentIndex == fragments.length - 1) return;
 		fragmentIndex++;
-		updateProgress();
 	}
 
 	function goBackFragment() {
 		if (fragmentIndex == 0) return;
 		fragmentIndex--;
-		updateProgress();
-	}
-
-	function updateProgress() {
-		const progress = fragmentIndex / (fragments.length - 1);
-		contentPosition = progress;
 	}
 
 	function onKeyDown({ code }: KeyboardEvent) {
