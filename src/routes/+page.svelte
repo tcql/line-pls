@@ -54,7 +54,7 @@
 
 {#if $content == ''}
 	<div class="prose">
-		<h3>Welcome to <strong class="text-secondary">line-pls</strong>!</h3>
+		<h1>Welcome to <strong class="text-secondary">line-pls</strong>!</h1>
 		<p>
 			Check out the <a class="cursor-pointer" onclick={() => ($helpOpen = true)}>Help</a>
 			for guidance, or go ahead and
