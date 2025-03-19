@@ -7,7 +7,9 @@ lets you read text content line-by-line in your browser. Reading progress is sav
 line-pls was built as a weekend project, at the request of a friend. The initial ask was something like:
 
 > I want a way to read Project Gutenberg texts one line at a time.
-> I want the font to be big so it's easily legible and difficult to get lost
+>
+> I want the font to be big so it's easily legible and difficult to get lost.
+>
 > I want it to save my progress so I can come back later
 
 ## features
