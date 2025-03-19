@@ -1,38 +1,26 @@
-# sv
+# line-pls
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+lets you read text content line-by-line in your browser. Reading progress is saved in local storagee
 
-## Creating a project
+## why?
 
-If you're seeing this, you've probably already done this step. Congrats!
+line-pls was built as a weekend project, at the request of a friend. The initial ask was something like:
 
-```bash
-# create a new project in the current directory
-npx sv create
+> I want a way to read Project Gutenberg texts one line at a time.
+> I want the font to be big so it's easily legible and difficult to get lost
+> I want it to save my progress so I can come back later
 
-# create a new project in my-app
-npx sv create my-app
-```
+## features
 
-## Developing
+- paste arbitrary text content
+- split text either by character length or by retaining newlines in source content
+- navigate lines with keyboard
+- save content and reading progress
+- simple text search
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## built with
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- [Sveltekit](https://svelte.dev/docs/kit/introduction)
+- [TailwindCSS](https://tailwindcss.com)
+- [DaisyUI](https://daisyui.com)
+- [Atkinson Hyperlegible Font](https://www.brailleinstitute.org/freefont/)
