@@ -1,38 +1,39 @@
-<script>
-	import { findInFragments } from '$lib';
-	import { ChevronLeft, ChevronRight, Icon } from 'svelte-hero-icons';
+<script lang="ts">
+	import { findInFragments, type FragmentObject } from '$lib';
+	import { ChevronLeft, ChevronRight, Icon, type IconSource } from 'svelte-hero-icons';
 
-	let { fragmentIndex = $bindable(0), fragments = [] } = $props();
+	interface Props {
+		fragmentIndex: number;
+		fragments: FragmentObject[];
+	}
+	let { fragmentIndex = $bindable(0), fragments = [] }: Props = $props();
 
 	let searchValue = $state('');
 	let prevResult = $derived(runSearch(searchValue, fragmentIndex - 1, true));
 	let nextResult = $derived(runSearch(searchValue, fragmentIndex + 1));
 
-	/**
-	 * @param {string} search
-	 * @param {number} start
-	 * @param {boolean} reverse
-	 */
-	function runSearch(search, start, reverse = false) {
-		if (!search || search.length < 3) {
-			return false;
+	function runSearch(search: string, start: number, reverse = false): number {
+		if (search.length < 3) {
+			return -1;
 		}
 		return findInFragments(fragments, search, start, reverse);
 	}
 
 	/**
 	 * update fragmentIndex to the provided search result, if it's valid
-	 * @param {number|boolean} idx
 	 */
-	function gotoResult(idx) {
-		if (idx !== false) {
+	function gotoResult(idx: number) {
+		if (idx !== -1) {
 			fragmentIndex = Number(idx);
 		}
 	}
 </script>
 
-{#snippet searchNav(idx, icon)}
-	<button class="btn btn-sm join-item" disabled={idx === -1} onclick={() => gotoResult(idx)}>
+{#snippet searchNav(idx: number, icon: IconSource)}
+	{@const disabled = idx === -1}
+	{@const onclick = () => gotoResult(idx)}
+
+	<button class="btn btn-sm join-item" {disabled} {onclick}>
 		<Icon src={icon} size="12" />
 	</button>
 {/snippet}
