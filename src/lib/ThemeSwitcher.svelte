@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { themeChange } from 'theme-change';
 
-	const themes = [
+	const themes: string[] = [
 		'dracula',
 		'light',
 		'dark',

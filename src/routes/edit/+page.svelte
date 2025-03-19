@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import { content } from '$lib/stores';
 	import { Icon, InformationCircle } from 'svelte-hero-icons';
+	import { get } from 'svelte/store';
 
-	let val = $content;
+	let val: string = get(content);
 	let updatable = false;
 
 	function updateContent() {

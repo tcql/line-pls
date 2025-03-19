@@ -1,5 +1,10 @@
-<script>
-	let { fragmentIndex = 0, fragmentCount = 0, contentPosition = 0 } = $props();
+<script lang="ts">
+	interface Props {
+		fragmentIndex: number;
+		fragmentCount: number;
+		contentPosition: number;
+	}
+	let { fragmentIndex = 0, fragmentCount = 0, contentPosition = 0 }: Props = $props();
 
 	let pct = $derived((contentPosition * 100).toFixed(1));
 </script>

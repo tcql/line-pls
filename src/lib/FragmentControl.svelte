@@ -1,5 +1,16 @@
-<script>
-	let { fragments = [], contentPosition = $bindable(0.0), fragmentIndex = $bindable(0) } = $props();
+<script lang="ts">
+	import type { FragmentObject } from '$lib';
+
+	interface Props {
+		fragments: FragmentObject[];
+		fragmentIndex: number;
+		contentPosition: number;
+	}
+	let {
+		fragments = [],
+		contentPosition = $bindable(0.0),
+		fragmentIndex = $bindable(0)
+	}: Props = $props();
 
 	function advanceFragment() {
 		if (fragmentIndex == fragments.length - 1) return;
@@ -18,15 +29,15 @@
 		contentPosition = progress;
 	}
 
-	function onKeyDown(e) {
-		switch (e.keyCode) {
-			case 32:
-			case 39:
-			case 40:
+	function onKeyDown({ code }: KeyboardEvent) {
+		switch (code) {
+			case 'ArrowDown':
+			case 'ArrowRight':
+			case 'Space':
 				advanceFragment();
 				break;
-			case 37:
-			case 38:
+			case 'ArrowUp':
+			case 'ArrowLeft':
 				goBackFragment();
 				break;
 		}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Dock from '$lib/Dock.svelte';
 	import Header from '$lib/Header.svelte';
 	import { onMount } from 'svelte';

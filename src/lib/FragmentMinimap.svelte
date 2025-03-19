@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { contentPosition } from './stores';
 
 	let { onSetProgress } = $props();
@@ -8,7 +8,7 @@
 
 	let pos = $derived(Math.round($contentPosition * 100));
 
-	function isInPercentile(val, percentile, size) {
+	function isInPercentile(val: number, percentile: number, size: number): boolean {
 		return val >= percentile && val < percentile + size;
 	}
 </script>

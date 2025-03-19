@@ -1,20 +1,21 @@
-<script>
+<script lang="ts">
 	import { Icon, XMark } from 'svelte-hero-icons';
 	import { blur } from 'svelte/transition';
 	import { base } from '$app/paths';
 	import FragmentDisplay from './FragmentDisplay.svelte';
 	import { onMount } from 'svelte';
+	import type { FragmentObject } from '$lib';
 
-	let {visible = $bindable(false)} = $props();
+	let { visible = $bindable(false) } = $props();
 
-	const demoFragments=[
-		{text: 'This is the first line'},
-		{text: 'This is the second line'},
-		{text: 'This is the third line'},
-		{text: 'This is the final line!'}
-	]
-	let demoFragmentIndex = $state(0)
-	let demoIterDir = $state(1)
+	const demoFragments: FragmentObject[] = [
+		{ text: 'This is the first line', length: 1 },
+		{ text: 'This is the second line', length: 1 },
+		{ text: 'This is the third line', length: 1 },
+		{ text: 'This is the final line!', length: 1 }
+	];
+	let demoFragmentIndex = $state(0);
+	let demoIterDir = $state(1);
 
 	/** convenience shortcut to quickly hide */
 	function onclick() {
@@ -22,16 +23,15 @@
 	}
 
 	onMount(() => {
-			setInterval(() => {
-				let isHittingStart = demoFragmentIndex == 0 && demoIterDir < 0
-				let isHittingEnd = demoFragmentIndex == demoFragments.length - 1 && demoIterDir > 0
-				if (isHittingStart || isHittingEnd) {
-					demoIterDir *= -1
-				}
-				demoFragmentIndex += demoIterDir
-			}, 2000)
-	
-	})
+		setInterval(() => {
+			let isHittingStart = demoFragmentIndex == 0 && demoIterDir < 0;
+			let isHittingEnd = demoFragmentIndex == demoFragments.length - 1 && demoIterDir > 0;
+			if (isHittingStart || isHittingEnd) {
+				demoIterDir *= -1;
+			}
+			demoFragmentIndex += demoIterDir;
+		}, 2000);
+	});
 </script>
 
 {#if visible}
@@ -53,15 +53,15 @@
 						by newlines in the source text or by using a max character limit.
 					</p>
 
-					<div class='text-primary ml-8 h-48 flex items-center'>
-						<FragmentDisplay fragments={demoFragments} fragmentIndex={demoFragmentIndex}/>
+					<div class="text-primary ml-8 flex h-48 items-center">
+						<FragmentDisplay fragments={demoFragments} fragmentIndex={demoFragmentIndex} />
 					</div>
 
 					<p>
 						The site remembers your content and where you left off, so next time you come back you
 						can keep reading.
 					</p>
-	
+
 					<h3>How do I use it?</h3>
 					<p>
 						Head to the <a href="{base}/edit" {onclick}>Edit</a> page, paste some content in, then
